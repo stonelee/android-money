@@ -28,6 +28,7 @@
             android:inputType="numberDecimal"
             android:layout_weight="1"
             android:hint="请输入金额"
+            android:imeOptions="actionDone"
             android:id="@+id/money" />
 
         <ImageButton

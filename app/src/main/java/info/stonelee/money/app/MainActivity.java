@@ -8,8 +8,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -74,6 +76,8 @@ public class MainActivity extends ActionBarActivity implements BillDialogFragmen
         });
 
         caleTotalMoney(cursor);
+
+        registerForContextMenu(list);
     }
 
     private void caleTotalMoney(Cursor cursor) {
@@ -131,13 +135,30 @@ public class MainActivity extends ActionBarActivity implements BillDialogFragmen
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.remove:
+                bill.remove(info.id);
+                refreshList();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         BillDialogFragment d = (BillDialogFragment) dialog;
         bill.update(d.id, d.getMoney());
-
         refreshList();
-
-        Toast.makeText(this, "ok ", Toast.LENGTH_LONG).show();
     }
 
     private void refreshList() {

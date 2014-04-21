@@ -96,4 +96,12 @@ public final class Bill {
         return count;
     }
 
+    public void remove(long id) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        String selection = BillEntity._ID + "=?";
+        String[] selectionArgs = {String.valueOf(id)};
+        db.delete(BillEntity.TABLE_NAME, selection, selectionArgs);
+    }
+
 }

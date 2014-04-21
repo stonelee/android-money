@@ -83,6 +83,11 @@ public class BillDialogFragment extends DialogFragment {
                         setMoney(changedMoney);
                         mListener.onDialogPositiveClick(BillDialogFragment.this);
                     }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        return;
+                    }
                 });
         return builder.create();
     }

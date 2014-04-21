@@ -1,6 +1,7 @@
 package info.stonelee.money.app;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.database.Cursor;
 import android.os.Build;
@@ -145,8 +146,15 @@ public class MainActivity extends ActionBarActivity implements BillDialogFragmen
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_chart:
+                Intent intent = new Intent(this, ChartActivity.class);
+                float[] moneyList = {1, 5, 8};
+                intent.putExtra("moneylist", moneyList);
+                startActivity(intent);
+                return true;
+            case R.id.action_settings:
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

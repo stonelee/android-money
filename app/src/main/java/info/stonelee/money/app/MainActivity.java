@@ -1,25 +1,29 @@
 package info.stonelee.money.app;
 
 import android.annotation.TargetApi;
+import android.support.v4.app.DialogFragment;
 import android.database.Cursor;
 import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements BillDialogFragment.BillDialogListener {
     public static final String TAG = "MainActivity";
     private Bill bill;
     SimpleCursorAdapter adapter;
@@ -58,6 +62,17 @@ public class MainActivity extends ActionBarActivity {
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
 
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ListView listView = (ListView) parent;
+                Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+                float money = cursor.getFloat(cursor.getColumnIndexOrThrow(Bill.BillEntity.COLUMN_NAME_MONEY));
+                DialogFragment dialog = BillDialogFragment.newInstance(id, money);
+                dialog.show(getSupportFragmentManager(), "dialog_bill");
+            }
+        });
+
         caleTotalMoney(cursor);
     }
 
@@ -69,30 +84,28 @@ public class MainActivity extends ActionBarActivity {
             } while (cursor.moveToNext());
         }
         TextView editText = (TextView) findViewById(R.id.total);
-        editText.setText("总计：" + String.valueOf(total));
+        editText.setText("总计：" + String.format("%.2f", total));
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     private void insertMoney() {
-        Switch way = (Switch) findViewById(R.id.way);
+        Switch switcher = (Switch) findViewById(R.id.way);
         EditText editText = (EditText) findViewById(R.id.money);
 
         if (TextUtils.isEmpty(editText.getText().toString())) {
             return;
         }
 
-        float number = Float.valueOf(editText.getText().toString());
-        if (way.isChecked()) {
-            number = -number;
+        float money = Float.valueOf(editText.getText().toString());
+        if (switcher.isChecked()) {
+            money = -money;
         }
-        bill.insert(number);
+        bill.insert(money);
 
-        Cursor cursor = bill.query();
-        adapter.changeCursor(cursor);
-        caleTotalMoney(cursor);
+        refreshList();
 
         editText.setText("");
-        way.setChecked(false);
+        switcher.setChecked(false);
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
@@ -117,4 +130,19 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        BillDialogFragment d = (BillDialogFragment) dialog;
+        bill.update(d.id, d.getMoney());
+
+        refreshList();
+
+        Toast.makeText(this, "ok ", Toast.LENGTH_LONG).show();
+    }
+
+    private void refreshList() {
+        Cursor cursor = bill.query();
+        adapter.changeCursor(cursor);
+        caleTotalMoney(cursor);
+    }
 }

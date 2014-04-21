@@ -83,4 +83,17 @@ public final class Bill {
         return c;
     }
 
+    public int update(long id, float money) {
+        SQLiteDatabase db = helper.getReadableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(BillEntity.COLUMN_NAME_MONEY, money);
+
+        String selection = BillEntity._ID + "=?";
+        String[] selectionArgs = {String.valueOf(id)};
+
+        int count = db.update(BillEntity.TABLE_NAME, values, selection, selectionArgs);
+        return count;
+    }
+
 }

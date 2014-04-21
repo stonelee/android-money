@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="20dp">
+    android:layout_height="match_parent"
+    android:stretchColumns="1">
 
-    <Switch
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/way"
-        android:textOn="欠钱"
-        android:textOff="请客"
-        tools:ignore="NewApi" />
+    <TableRow android:layout_margin="20dp">
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:layout_weight="1"
-        android:id="@+id/money" />
+        <TextView
+            android:text="方式："
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-</LinearLayout>
+        <Switch
+            android:id="@+id/way"
+            android:textOn="欠钱"
+            android:textOff="请客"
+            android:layout_gravity="start" />
+    </TableRow>
+
+    <TableRow android:layout_margin="20dp">
+
+        <TextView
+            android:text="金额："
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/money"
+            android:inputType="numberDecimal" />
+    </TableRow>
+</TableLayout>

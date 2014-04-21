@@ -61,6 +61,20 @@ public class MainActivity extends ActionBarActivity implements BillDialogFragmen
                 this, android.R.layout.simple_list_item_2, cursor,
                 new String[]{Bill.BillEntity.COLUMN_NAME_MONEY, Bill.BillEntity.COLUMN_NAME_CREATED_DATE},
                 new int[]{android.R.id.text1, android.R.id.text2}, 0);
+        adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+            @Override
+            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+                if (columnIndex == cursor.getColumnIndexOrThrow(Bill.BillEntity.COLUMN_NAME_MONEY)) {
+                    float money = cursor.getFloat(columnIndex);
+                    String way = money < 0 ? "欠钱" : "请客";
+
+                    TextView textView = (TextView) view;
+                    textView.setText("【" + way + "】" + String.valueOf(money));
+                    return true;
+                }
+                return false;
+            }
+        });
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
 
@@ -87,8 +101,11 @@ public class MainActivity extends ActionBarActivity implements BillDialogFragmen
                 total += cursor.getFloat(cursor.getColumnIndexOrThrow(Bill.BillEntity.COLUMN_NAME_MONEY));
             } while (cursor.moveToNext());
         }
+
+        String way = total < 0 ? "欠" : "请";
+
         TextView editText = (TextView) findViewById(R.id.total);
-        editText.setText("总计：" + String.format("%.2f", total));
+        editText.setText("总计：" + String.format("%.2f", total) + "【" + way + "】");
     }
 
     @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)

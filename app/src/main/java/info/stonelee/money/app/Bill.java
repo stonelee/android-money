@@ -18,7 +18,8 @@ public final class Bill {
     public static final class BillEntity implements BaseColumns {
         public static final String TABLE_NAME = "bill";
         public static final String COLUMN_NAME_MONEY = "money";
-        public static final String COLUMN_NAME_CREATED_DATE = "created";
+        public static final String COLUMN_NAME_ORIGIN_CREATED_DATE = "created";
+        public static final String COLUMN_NAME_CREATED_DATE = "datetime(created, 'localtime')";
     }
 
 
@@ -43,7 +44,7 @@ public final class Bill {
                 "CREATE TABLE " + BillEntity.TABLE_NAME + " (" +
                         BillEntity._ID + " INTEGER PRIMARY KEY," +
                         BillEntity.COLUMN_NAME_MONEY + " FLOAT," +
-                        BillEntity.COLUMN_NAME_CREATED_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP" +
+                        BillEntity.COLUMN_NAME_ORIGIN_CREATED_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP" +
                         " )";
 
         private final String SQL_DELETE_ENTRIES =

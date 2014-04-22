@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.webkit.ConsoleMessage;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -36,7 +38,14 @@ public class ChartActivity extends Activity {
                 return true;
             }
         });
-        webView.loadUrl("file:///android_asset/index.html");
+        webView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+//        webView.loadUrl("file:///android_asset/index.html");
+        webView.loadUrl("http://192.168.0.142:8080/Personal/money/Money/app/src/main/assets/index.html");
     }
 
     public class WebAppInterface {
@@ -47,10 +56,9 @@ public class ChartActivity extends Activity {
         }
 
         @JavascriptInterface
-        public String getMoneyList() {
+        public String getBills() {
             Bundle args = getIntent().getExtras();
-            float[] moneylist = args.getFloatArray("moneylist");
-            return Arrays.toString(moneylist);
+            return args.getString("bills");
         }
 
         @JavascriptInterface

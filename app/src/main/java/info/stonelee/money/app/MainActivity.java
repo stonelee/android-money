@@ -26,6 +26,10 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends ActionBarActivity implements BillDialogFragment.BillDialogListener {
     public static final String TAG = "MainActivity";
     private Bill bill;
@@ -149,14 +153,48 @@ public class MainActivity extends ActionBarActivity implements BillDialogFragmen
         switch (id) {
             case R.id.action_chart:
                 Intent intent = new Intent(this, ChartActivity.class);
-                float[] moneyList = {1, 5, 8};
-                intent.putExtra("moneylist", moneyList);
+                intent.putExtra("bills", cursorToJSON(bill.query()));
                 startActivity(intent);
-                return true;
-            case R.id.action_settings:
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private String cursorToJSON(Cursor cursor) {
+        JSONArray rows = new JSONArray();
+        if (cursor.moveToFirst()) {
+            do {
+                JSONObject row = new JSONObject();
+                int len = cursor.getColumnCount();
+                for (int i = 0; i < len; i++) {
+                    String colName = cursor.getColumnName(i);
+                    if (colName != null) {
+                        try {
+                            switch (cursor.getType(i)) {
+                                case Cursor.FIELD_TYPE_BLOB:
+                                    row.put(colName, cursor.getBlob(i).toString());
+                                    break;
+                                case Cursor.FIELD_TYPE_FLOAT:
+                                    row.put(colName, cursor.getDouble(i));
+                                    break;
+                                case Cursor.FIELD_TYPE_INTEGER:
+                                    row.put(colName, cursor.getLong(i));
+                                    break;
+                                case Cursor.FIELD_TYPE_NULL:
+                                    row.put(colName, null);
+                                    break;
+                                case Cursor.FIELD_TYPE_STRING:
+                                    row.put(colName, cursor.getString(i));
+                                    break;
+                            }
+                        } catch (JSONException e) {
+                        }
+                    }
+                }
+                rows.put(row);
+            } while (cursor.moveToNext());
+        }
+        return rows.toString();
     }
 
     @Override

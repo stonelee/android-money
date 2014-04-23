@@ -105,4 +105,18 @@ public final class Bill {
         db.delete(BillEntity.TABLE_NAME, selection, selectionArgs);
     }
 
+    public float getTotalMoney(Cursor cursor) {
+        float total = 0;
+        if (cursor.moveToFirst()) {
+            do {
+                total += cursor.getFloat(cursor.getColumnIndexOrThrow(BillEntity.COLUMN_NAME_MONEY));
+            } while (cursor.moveToNext());
+        }
+        return total;
+    }
+
+    public float getTotalMoney() {
+        Cursor cursor = this.query();
+        return getTotalMoney(cursor);
+    }
 }

@@ -1,12 +1,15 @@
 package info.stonelee.money.app;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
 import android.database.Cursor;
 import android.os.Build;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.ShareActionProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -100,13 +103,7 @@ public class MainActivity extends ActionBarActivity implements BillDialogFragmen
     }
 
     private void caleTotalMoney(Cursor cursor) {
-        float total = 0;
-        if (cursor.moveToFirst()) {
-            do {
-                total += cursor.getFloat(cursor.getColumnIndexOrThrow(Bill.BillEntity.COLUMN_NAME_MONEY));
-            } while (cursor.moveToNext());
-        }
-
+        float total = bill.getTotalMoney(cursor);
         String way = total < 0 ? "欠" : "请";
 
         TextView editText = (TextView) findViewById(R.id.total);
@@ -136,36 +133,59 @@ public class MainActivity extends ActionBarActivity implements BillDialogFragmen
 
     }
 
-    private void closeKeyboard(){
+    private void closeKeyboard() {
         EditText editText = (EditText) findViewById(R.id.money);
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
 
+    private ShareActionProvider mShareActionProvider;
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        MenuItem item = menu.findItem(R.id.action_share);
+        Context themedContext = this.getActionBar().getThemedContext();
+        mShareActionProvider = new ShareActionProvider(themedContext);
+        MenuItemCompat.setActionProvider(item, mShareActionProvider);
+        onActionShare();
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch (id) {
             case R.id.action_chart:
                 closeKeyboard();
-                Intent intent = new Intent(this, ChartActivity.class);
-                intent.putExtra("bills", cursorToJSON(bill.query()));
-                startActivity(intent);
+                onActionChart();
                 return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void onActionShare() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TEXT, getShareMessage());
+        intent.setType("text/plain");
+        mShareActionProvider.setShareIntent(intent);
+    }
+
+    private String getShareMessage() {
+        float total = bill.getTotalMoney();
+        return "总计：" + String.valueOf(total);
+    }
+
+    private void onActionChart() {
+        Intent intent = new Intent(this, ChartActivity.class);
+        intent.putExtra("bills", cursorToJSON(bill.query()));
+        startActivity(intent);
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private String cursorToJSON(Cursor cursor) {
         JSONArray rows = new JSONArray();
         if (cursor.moveToFirst()) {

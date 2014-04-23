@@ -6,5 +6,11 @@
         android:title="chart"
         android:icon="@drawable/ic_action_picture"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_share"
+        android:title="share"
+        android:icon="@drawable/ic_action_share"
+        android:actionProviderClass="android.support.v7.widget.ShareActionProvider"
+        app:showAsAction="ifRoom" />
 
 </menu>

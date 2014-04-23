@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Money</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">记账本</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
-    <string name="title_activity_chart">ChartActivity</string>
+    <string name="title_activity_chart">近期曲线图</string>
+    <string name="way_on">欠钱</string>
+    <string name="way_off">请客</string>
+    <string name="money_hint">请输入金额</string>
+    <string name="total_label">总计：</string>
+    <string name="way_label">方式：</string>
+    <string name="money_label">金额：</string>
+    <string name="remove">删除</string>
+    <string name="menu_chart">曲线</string>
+    <string name="menu_share">分享</string>
 
 </resources>

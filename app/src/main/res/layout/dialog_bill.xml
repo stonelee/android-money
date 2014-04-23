@@ -9,20 +9,20 @@
     <TableRow android:layout_margin="20dp">
 
         <TextView
-            android:text="方式："
+            android:text="@string/way_label"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <Switch
             android:id="@+id/way"
-            android:textOn="欠钱"
-            android:textOff="请客"
+            android:textOn="@string/way_on"
+            android:textOff="@string/way_off"
             android:layout_gravity="start" />
     </TableRow>
 
     <TableRow android:layout_margin="20dp">
 
         <TextView
-            android:text="金额："
+            android:text="@string/money_label"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <EditText

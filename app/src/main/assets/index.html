@@ -10,16 +10,34 @@
       height: 100%;
       margin: 0;
     }
-    h1 {
+    h1, h2{
       margin: 0;
-      line-height: 50px;
+    }
+    h1 {
+      margin-top: 10px;
+      line-height: 30px;
       text-align: center;
       font-size: 20px;
+    }
+    h2 {
+      text-align: center;
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    #total {
+      margin-left: 5px;
+    }
+    #datetime {
+      margin-left: 20px;
+      font-size: 14px;
+      color: #999;
     }
   </style>
 </head>
 <body>
   <h1>近期曲线图</h1>
+  <h2>总计：&yen;<span id="total">0</span><span id="datetime"></span></h2>
   <canvas id="myChart"></canvas>
 
   <script src="libs/lodash.js"></script>

@@ -19,8 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/way"
-            android:textOn="欠钱"
-            android:textOff="请客"
+            android:textOn="@string/way_on"
+            android:textOff="@string/way_off"
             tools:ignore="NewApi" />
 
         <EditText
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:inputType="numberDecimal"
             android:layout_weight="1"
-            android:hint="请输入金额"
+            android:hint="@string/money_hint"
             android:imeOptions="actionDone"
             android:id="@+id/money" />
 
@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="总计："
+        android:text="@string/total_label"
         android:id="@+id/total"
         android:layout_below="@+id/top" />
 

@@ -48,10 +48,11 @@
     return result;
   }
 
-  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = document.getElementById('myChart');
+  var ctx = myChart.getContext('2d');
   //adjust canvas scale
   ctx.canvas.width = window.innerWidth;
-  ctx.canvas.height = window.innerHeight - 50 - 10;
+  ctx.canvas.height = window.innerHeight - myChart.offsetTop - 10;
 
   function drawChart(bills) {
     var data = {
@@ -70,6 +71,17 @@
 
   App.getBills(function(data) {
     var bills = parseBills(data);
+
+    var total = _.reduce(bills, function(result, money) {
+      return result += money;
+    }, 0);
+    document.getElementById('total').innerHTML = total;
+
+    var dates = _.keys(bills);
+    var minDate = dates[0];
+    var maxDate = dates.slice(-1)[0];
+    document.getElementById('datetime').innerHTML = minDate + ' 至 ' + maxDate;
+
     drawChart(bills);
   });
 })();

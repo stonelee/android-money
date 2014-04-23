@@ -3,12 +3,12 @@
 
     <item
         android:id="@+id/action_chart"
-        android:title="chart"
+        android:title="@string/menu_chart"
         android:icon="@drawable/ic_action_picture"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_share"
-        android:title="share"
+        android:title="@string/menu_share"
         android:icon="@drawable/ic_action_share"
         android:actionProviderClass="android.support.v7.widget.ShareActionProvider"
         app:showAsAction="ifRoom" />

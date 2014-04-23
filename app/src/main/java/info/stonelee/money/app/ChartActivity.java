@@ -44,6 +44,7 @@ public class ChartActivity extends Activity {
                 return true;
             }
         });
+        webView.clearCache(true);
 //        webView.loadUrl("file:///android_asset/index.html");
         webView.loadUrl("http://192.168.0.142:8080/Personal/money/Money/app/src/main/assets/index.html");
     }

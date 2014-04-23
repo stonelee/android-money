@@ -32,26 +32,29 @@
   function parseBills(data) {
     var datetime = "datetime(created, 'localtime')";
 
-    var result = _.chain(data).groupBy(function(bill) {
+    var result = _.chain(data).reverse().groupBy(function(bill) {
       return bill[datetime].split(' ')[0];
     }).reduce(function(result, bills, date) {
       result[date] = _.reduce(bills, function(sum, bill) {
         return sum + bill.money;
       }, 0);
       return result;
+    }, {}).reduce(function(result, num, date) {
+      var key = date.split('-').slice(1).join('-');
+      result[key] = num;
+      return result;
     }, {}).value();
+
     return result;
   }
 
   var ctx = document.getElementById('myChart').getContext('2d');
   //adjust canvas scale
   ctx.canvas.width = window.innerWidth;
-  ctx.canvas.height = window.innerHeight;
+  ctx.canvas.height = window.innerHeight - 50 - 10;
 
-  App.getBills(function(data) {
-    var bills = parseBills(data);
-
-    var options = {
+  function drawChart(bills) {
+    var data = {
       labels: _.keys(bills),
       datasets: [{
         fillColor: 'rgba(151,187,205,0.5)',
@@ -62,6 +65,11 @@
       }]
     };
 
-    new Chart(ctx).Line(options);
+    new Chart(ctx).Line(data);
+  }
+
+  App.getBills(function(data) {
+    var bills = parseBills(data);
+    drawChart(bills);
   });
 })();

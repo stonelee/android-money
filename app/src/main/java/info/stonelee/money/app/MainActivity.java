@@ -132,10 +132,15 @@ public class MainActivity extends ActionBarActivity implements BillDialogFragmen
 
         editText.setText("");
         switcher.setChecked(false);
+        closeKeyboard();
+
+    }
+
+    private void closeKeyboard(){
+        EditText editText = (EditText) findViewById(R.id.money);
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -152,6 +157,7 @@ public class MainActivity extends ActionBarActivity implements BillDialogFragmen
         int id = item.getItemId();
         switch (id) {
             case R.id.action_chart:
+                closeKeyboard();
                 Intent intent = new Intent(this, ChartActivity.class);
                 intent.putExtra("bills", cursorToJSON(bill.query()));
                 startActivity(intent);

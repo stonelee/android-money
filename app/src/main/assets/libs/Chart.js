@@ -8,7 +8,7 @@
  */
 
 //Define the global Chart Variable as a class.
-window.Chart = function(context){
+window.Chart = function(context, neverHighDensityDisplay){
 
 	var chart = this;
 	
@@ -153,7 +153,7 @@ window.Chart = function(context){
 
 
 	//High pixel density displays - multiply the size of the canvas height/width by the device pixel ratio, then scale.
-	if (window.devicePixelRatio) {
+	if (window.devicePixelRatio && !neverHighDensityDisplay) {
 		context.canvas.style.width = width + "px";
 		context.canvas.style.height = height + "px";
 		context.canvas.height = height * window.devicePixelRatio;

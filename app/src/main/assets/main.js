@@ -109,8 +109,10 @@
       //为导出图像特别订制
       drawChartForBitmap: function() {
         //固定为250*250，如果随意可能会无法导出图像
-        var width = 250,
-          height = 250;
+        //var width = 250,
+          //height = 250;
+        var width = canvasWidth,
+          height = canvasHeight;
         ctx.canvas.style.width = width + 'px';
         ctx.canvas.style.height = height + 'px';
         ctx.canvas.width = width;
